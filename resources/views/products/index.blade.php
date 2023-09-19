@@ -13,6 +13,14 @@
         <input type="text" name="search" class="form-control" placeholder="商品名" value="{{ request('search') }}">
       </div>
       <div class="col-sm-12 col-md-2">
+        <select type="text" name="company_id" id= "company_id" class="form-control"  value="{{ request('company_id') }}">
+        <option disabled style='display:none;' @if (empty($product->company_id)) selected @endif>選択してください</option>
+          @foreach($companies as $company)
+            <option value="{{ $company->company_id }}" @if (isset($product->company_id) && ($product->company_id === $company->company_id)) selected @endif>{{ $company->company_name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="col-sm-12 col-md-2">
         <input type="number" name="min_price" class="form-control" placeholder="最小価格" value="{{ request('min_price') }}">
       </div>
       <div class="col-sm-12 col-md-2">

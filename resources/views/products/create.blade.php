@@ -11,7 +11,10 @@
     @csrf
     <div class="mb-3">
       <label for="product_name" class="form-label">商品名:</label>
-      <input id="product_name" type="text" name="product_name" class="form-control" required>
+      <input id="product_name" type="text" name="product_name" class="form-control" >
+      @if ($errors->has('product_name'))
+        <h5 style="color:red">{{ $errors->first('product_name') }}</h5>
+      @endif
     </div>
 
     <div class="mb-3">
@@ -25,22 +28,28 @@
 
     <div class="mb-3">
       <label for="price" class="form-label">価格:</label>
-      <input id="price" type="text" name="price" class="form-control" required>
+      <input id="price" type="text" name="price" class="form-control" >
+      @if ($errors->has('price'))
+        <h5 style="color:red">{{ $errors->first('price') }}</h5>
+      @endif
     </div>
 
     <div class="mb-3">
       <label for="stock" class="form-label">在庫数:</label>
-      <input id="stock" type="text" name="stock" class="form-control" required>
+      <input id="stock" type="text" name="stock" class="form-control" >
+      @if ($errors->has('stock'))
+        <h5 style="color:red">{{ $errors->first('stock') }}</h5>
+      @endif
     </div>
 
     <div class="mb-3">
       <label for="comment" class="form-label">コメント:</label>
-      <textarea id="comment" name="comment" class="form-control" rows="3" required></textarea>
+      <textarea id="comment" name="comment" class="form-control" rows="3" ></textarea>
     </div>
 
     <div class="mb-3">
       <label for="img_path" class="form-label">商品画像:</label>
-      <input id="img_path" type="file" name="img_path" class="form-control" required>
+      <input id="img_path" type="file" name="img_path" class="form-control" >
     </div>
 
     <button type="submit" class="btn btn-primary">登録</button>

@@ -5,18 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
     
     public function index(Request $request)
     {
+        
         $query = Product::query();
 
         if($search = $request->search){
             $query->where('product_name', 'LIKE', "%{$search}%");
         }
 
+        if($company_id = $request->company_id){
+            $query->where('company_id', 'LIKE', "%{$company_id}%");
+        }
+        
         if($min_price = $request->min_price){
             $query->where('price', '>=', $min_price);
         }
@@ -39,7 +45,8 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(5);
-        return view('products.index', ['products' => $products]);
+        $companies = Company::all();
+        return view('products.index', ['products' => $products], compact('companies'));
     }
 
     
@@ -52,30 +59,48 @@ class ProductController extends Controller
     
     public function store(Request $request)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'company_id' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'comment' => 'nullable',
-            'img_path' => 'nullable|image|max:2048',
-        ]);
+            $request->validate([
+                'product_name' => 'required',
+                'company_id' => 'required',
+                'price' => 'required|integer',
+                'stock' => 'required|integer',
+                'comment' => 'nullable',
+                'img_path' => 'nullable|image|max:2048',
+            ],
+            [
+                'product_name.required' => '商品名は必須です',
+                'company_id.required' => 'メーカー名は必須です',
+                'price.required' => '価格は必須です',
+                'price.integer' => '半角数字で必須入力',
+                'stock.required' => '在庫数は必須です',
+                'stock.integer' => '在庫数は半角数字で必須です',
+                'img_path.image' => '画像ファイルを選択してください',
+                'img_path.max:2048' => '最大2048KBまでです' 
+            ]);
 
-        $product = new Product([
-            'product_name' => $request->get('product_name'),
-            'company_id' => $request->get('company_id'),
-            'price' => $request->get('price'),
-            'stock' => $request->get('stock'),
-            'comment' => $request->get('comment'),
-        ]);
+            // DB::beginTransaction();
 
-        if($request->hasFile('img_path')){
-            $filename = $request->img_path->getClientOriginalName();
-            $filePath = $request->img_path->storeAs('products', $filename, 'public');
-            $product->img_path = '/storage/' . $filePath;
-        }
+        // try {
+            $product = new Product([
+                'product_name' => $request->get('product_name'),
+                'company_id' => $request->get('company_id'),
+                'price' => $request->get('price'),
+                'stock' => $request->get('stock'),
+                'comment' => $request->get('comment'),
+            ]);
 
-        $product->save();
+            if($request->hasFile('img_path')){
+                $filename = $request->img_path->getClientOriginalName();
+                $filePath = $request->img_path->storeAs('products', $filename, 'public');
+                $product->img_path = '/storage/' . $filePath;
+            }
+
+            $product->save();
+        //     DB::commit();
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     Log::error($e);
+        // }
 
         return redirect('products');
     }
@@ -96,17 +121,44 @@ class ProductController extends Controller
     
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-        ]);
+        DB::beginTransaction();
 
-        $product->product_name = $request->product_name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
+        try {
+            $request->validate([
+                'product_name' => 'required',
+                'company_id' => 'required',
+                'price' => 'required',
+                'stock' => 'required',
+                'comment' => 'nullable',
+                'img_path' => 'nullable|image|max:2048',
+            ],
+            [
+                'product_name.required' => '商品名は必須です',
+                'company_id.required' => 'メーカー名は必須です',
+                'price.required' => '価格は必須です',
+                'stock.required' => '在庫は必須です',
+                'img_path.image' => '画像ファイルを選択してください',
+                'img_path.max:2048' => '最大2048KBまでです' 
+            ]);
 
-        $product->save();
+            $product->product_name = $request->product_name;
+            $product->company_id = $request->company_id;
+            $product->price = $request->price;
+            $product->stock = $request->stock;
+            $product->comment = $request->comment;
+
+            if($request->hasFile('img_path')){
+                $filename = $request->img_path->getClientOriginalName();
+                $filePath = $request->img_path->storeAs('products', $filename, 'public');
+                $product->img_path = '/storage/' . $filePath;
+            }
+
+            $product->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error($e);
+        }
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
@@ -114,7 +166,15 @@ class ProductController extends Controller
     
     public function destroy(Product $product)
     {
-        $product->delete();
+        DB::beginTransaction();
+
+        try {
+            $product->delete();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error($e);
+        }
 
         return redirect('/products');
     }

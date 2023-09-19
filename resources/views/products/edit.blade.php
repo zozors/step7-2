@@ -15,7 +15,10 @@
 
               <div class="mb-3">
                 <label for="product_name" class="form-label">商品名</label>
-                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}" required>
+                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}" >
+                @if ($errors->has('product_name'))
+                  <h5 style="color:red">{{ $errors->first('product_name') }}</h5>
+                @endif
               </div>
 
               <div class="mb-3">
@@ -29,12 +32,18 @@
 
               <div class="mb-3">
                 <label for="price" class="form-label">金額</label>
-                <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" required>
+                <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" >
+                @if ($errors->has('price'))
+                  <h5 style="color:red">{{ $errors->first('price') }}</h5>
+                @endif
               </div>
 
               <div class="mb-3">
                 <label for="stock" class="form-label">在庫数</label>
-                  <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}" required>
+                  <input type="number" class="form-control" id="stock" name="stock" value="{{ $product->stock }}" >
+                  @if ($errors->has('stock'))
+                  <h5 style="color:red">{{ $errors->first('stock') }}</h5>
+                @endif
               </div>
 
               <div class="mb-3">
