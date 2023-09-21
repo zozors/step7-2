@@ -12,43 +12,11 @@ class ProductController extends Controller
     
     public function index(Request $request)
     {
-        
-        $query = Product::query();
-
-        if($search = $request->search){
-            $query->where('product_name', 'LIKE', "%{$search}%");
-        }
-
-        if($company_id = $request->company_id){
-            $query->where('company_id', 'LIKE', "%{$company_id}%");
-        }
-        
-        if($min_price = $request->min_price){
-            $query->where('price', '>=', $min_price);
-        }
-
-        if($max_price = $request->max_price){
-            $query->where('price', '<=', $max_price);
-        }
-
-        if($min_stock = $request->min_stock){
-            $query->where('stock', '>=', $min_stock);
-        }
-
-        if($max_stock = $request->max_stock){
-            $query->where('stock', '<=', $max_stock);
-        }
-
-        if($sort = $request->sort){
-            $direction = $request->direction == 'desc' ? 'desc' : 'asc';
-            $query->orderBy($sort, $direction);
-        }
-
-        $products = $query->paginate(5);
         $companies = Company::all();
+        $model = new Product;
+        $products = $model->search($request);
         return view('products.index', ['products' => $products], compact('companies'));
     }
-
     
     public function create()
     {
@@ -78,29 +46,10 @@ class ProductController extends Controller
                 'img_path.max:2048' => '最大2048KBまでです' 
             ]);
 
-            // DB::beginTransaction();
+            // DB::transaction(function () use($request) {
 
-        // try {
-            $product = new Product([
-                'product_name' => $request->get('product_name'),
-                'company_id' => $request->get('company_id'),
-                'price' => $request->get('price'),
-                'stock' => $request->get('stock'),
-                'comment' => $request->get('comment'),
-            ]);
-
-            if($request->hasFile('img_path')){
-                $filename = $request->img_path->getClientOriginalName();
-                $filePath = $request->img_path->storeAs('products', $filename, 'public');
-                $product->img_path = '/storage/' . $filePath;
-            }
-
-            $product->save();
-        //     DB::commit();
-        // } catch (Exception $e) {
-        //     DB::rollback();
-        //     Log::error($e);
-        // }
+            $model = new Product;
+            $products = $model->store($request);
 
         return redirect('products');
     }
@@ -121,9 +70,6 @@ class ProductController extends Controller
     
     public function update(Request $request, Product $product)
     {
-        DB::beginTransaction();
-
-        try {
             $request->validate([
                 'product_name' => 'required',
                 'company_id' => 'required',
@@ -141,6 +87,12 @@ class ProductController extends Controller
                 'img_path.max:2048' => '最大2048KBまでです' 
             ]);
 
+            // DB::transaction(function () use($request) {
+
+            // $model = new Product;
+            // $products = $model->update($request);
+
+            
             $product->product_name = $request->product_name;
             $product->company_id = $request->company_id;
             $product->price = $request->price;
@@ -154,27 +106,17 @@ class ProductController extends Controller
             }
 
             $product->save();
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollback();
-            Log::error($e);
-        }
-
+        // });
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
     
     public function destroy(Product $product)
     {
-        DB::beginTransaction();
-
-        try {
+        // DB::transaction(function () use ($request) {
             $product->delete();
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollback();
-            Log::error($e);
-        }
+
+        // });
 
         return redirect('/products');
     }
