@@ -45,6 +45,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th>ID</th>
           <th>商品名</th>
           <th>メーカー</th>
           <th>価格
@@ -64,6 +65,7 @@
       <tbody>
       @foreach ($products as $product)
         <tr>
+          <td>{{ $product->id }}</td>
           <td>{{ $product->product_name }}</td>
           <td>{{ $product->company->company_name }}</td>
           <td>{{ $product->price }}</td>

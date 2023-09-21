@@ -14,6 +14,11 @@
               @method('PUT')
 
               <div class="mb-3">
+                <label for="ID" class="form-label">ID</label>
+                <div class="col-sm-9">{{ $product->id }}</div>
+              </div>
+
+              <div class="mb-3">
                 <label for="product_name" class="form-label">商品名</label>
                 <input type="text" class="form-control" id="product_name" name="product_name" value="{{ $product->product_name }}" >
                 @if ($errors->has('product_name'))
