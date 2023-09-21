@@ -46,11 +46,11 @@ class ProductController extends Controller
                 'img_path.max:2048' => '最大2048KBまでです' 
             ]);
 
-            // DB::transaction(function () use($request) {
+            DB::transaction(function () use($request) {
 
             $model = new Product;
             $products = $model->store($request);
-
+            });
         return redirect('products');
     }
 
@@ -87,36 +87,20 @@ class ProductController extends Controller
                 'img_path.max:2048' => '最大2048KBまでです' 
             ]);
 
-            // DB::transaction(function () use($request) {
+            DB::transaction(function () use($request, $product) {
 
-            // $model = new Product;
-            // $products = $model->update($request);
-
-            
-            $product->product_name = $request->product_name;
-            $product->company_id = $request->company_id;
-            $product->price = $request->price;
-            $product->stock = $request->stock;
-            $product->comment = $request->comment;
-
-            if($request->hasFile('img_path')){
-                $filename = $request->img_path->getClientOriginalName();
-                $filePath = $request->img_path->storeAs('products', $filename, 'public');
-                $product->img_path = '/storage/' . $filePath;
-            }
-
-            $product->save();
-        // });
+            $model = new Product;
+            $products = $model->productUpdate($request, $product);
+            });
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
     
-    public function destroy(Product $product)
+    public function destroy(Request $request, Product $product)
     {
-        // DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, $product) {
             $product->delete();
-
-        // });
+        });
 
         return redirect('/products');
     }

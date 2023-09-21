@@ -16,7 +16,7 @@
         <select type="text" name="company_id" id= "company_id" class="form-control"  value="{{ request('company_id') }}">
         <option disabled style='display:none;' @if (empty($product->company_id)) selected @endif>選択してください</option>
           @foreach($companies as $company)
-            <option value="{{ $company->company_id }}" @if (isset($product->company_id) && ($product->company_id === $company->company_id)) selected @endif>{{ $company->company_name }}</option>
+            <option value="{{ $company->id }}"> {{ $company->company_name }}</option>
           @endforeach
         </select>
       </div>
