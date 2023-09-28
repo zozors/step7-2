@@ -8,7 +8,7 @@
 
   <div class="search mt-5">
     <h2>検索条件で絞り込み</h2>
-    <form action="{{ route('products.index') }}" method="GET" class="row g-3">
+    <form id="search-form" method="GET" class="row g-3">
       <div class="col-sm-12 col-md-3">
         <input type="text" name="search" class="form-control" placeholder="商品名" value="{{ request('search') }}">
       </div>

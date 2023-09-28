@@ -16,8 +16,25 @@ class ProductController extends Controller
         $model = new Product;
         $products = $model->search($request);
         return view('products.index', ['products' => $products], compact('companies'));
+   
+        $sortColumn = $request->input('sort', 'id');
+        $sortDirection = $request->input('direction', 'desc');
+
+        $query = Product::query();
+        $query->orderBy($sortColumn, $sortDirection);
+        $products = $query->get();
+
+        if ($request->ajax()) {
+            return view('products.list', compact('products'))->render();
+        }
+
+        return view('products.index', [
+            'products' => $products,
+            'sortColumn' => $sortColumn,
+            'sortDirection' => $sortDirection,
+        ]);
     }
-    
+
     public function create()
     {
         $companies = Company::all();
