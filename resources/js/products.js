@@ -1,3 +1,5 @@
+console.log('Hello World');
+
 $(document).ready(function () {
   // 商品リストを読み込み・更新する関数
   function loadProductList() {
