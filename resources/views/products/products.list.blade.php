@@ -1,6 +1,6 @@
-<div id="product-list">
+<div class="products mt-5">
     <h2>商品情報</h2>
-    <table class="table table-striped">
+    <table class="table table-striped" id="product-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -20,7 +20,7 @@
                 <th>操作</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="product-list">
             @foreach ($products as $product)
                 <tr>
                   <td>{{ $product->id }}</td>
@@ -38,6 +38,7 @@
                       @method('DELETE')
                       <button type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
                     </form>
+                  </td>
                 </tr>
             @endforeach
         </tbody>

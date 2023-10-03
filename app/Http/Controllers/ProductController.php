@@ -17,22 +17,24 @@ class ProductController extends Controller
         $products = $model->search($request);
         return view('products.index', ['products' => $products], compact('companies'));
    
-        $sortColumn = $request->input('sort', 'id');
-        $sortDirection = $request->input('direction', 'desc');
+        // $sortColumn = $request->input('sort', 'id');
+        // $sortDirection = $request->input('direction', 'asc');
 
-        $query = Product::query();
-        $query->orderBy($sortColumn, $sortDirection);
-        $products = $query->get();
+        // $query = Product::query();
+        // $query->orderBy($sortColumn, $sortDirection);
+        // $products = $query->get();
 
-        if ($request->ajax()) {
-            return view('products.list', compact('products'))->render();
-        }
-
-        return view('products.index', [
-            'products' => $products,
-            'sortColumn' => $sortColumn,
-            'sortDirection' => $sortDirection,
-        ]);
+        // if ($request->ajax()) {
+        //     // JSONレスポンスを返す
+        //     return response()->json($products);
+        // }
+    
+        // HTMLレスポンスを返す
+        // return view('products.index', [
+        //     'products' => $products,
+        //     'sortColumn' => $sortColumn,
+        //     'sortDirection' => $sortDirection,
+        // ]);
     }
 
     public function create()

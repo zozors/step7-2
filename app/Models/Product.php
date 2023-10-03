@@ -22,7 +22,7 @@ class Product extends Model
     {
         $query = self::query();
             if($search = $request->search){ $query->where('product_name', 'LIKE', "%{$search}%"); }
-            if($company_id = $request->company_id){$query->where('company_id', '=', $company_id);}
+            if($company_id = $request->input("company_id")){$query->where('company_id', '=', $company_id);}
             if($min_price = $request->min_price){ $query->where('price', '>=', $min_price); }
             if($max_price = $request->max_price){ $query->where('price', '<=', $max_price); }
             if($min_stock = $request->min_stock){ $query->where('stock', '>=', $min_stock); }
