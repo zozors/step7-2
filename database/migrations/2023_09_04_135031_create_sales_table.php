@@ -19,7 +19,8 @@ class CreateSalesTable extends Migration
             $table->timestamps();
 
             // 外部キー制約
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->dropForeign(['product_id']);
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

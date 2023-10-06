@@ -17,24 +17,6 @@ class ProductController extends Controller
         $products = $model->search($request);
         return view('products.index', ['products' => $products], compact('companies'));
    
-        // $sortColumn = $request->input('sort', 'id');
-        // $sortDirection = $request->input('direction', 'asc');
-
-        // $query = Product::query();
-        // $query->orderBy($sortColumn, $sortDirection);
-        // $products = $query->get();
-
-        // if ($request->ajax()) {
-        //     // JSONレスポンスを返す
-        //     return response()->json($products);
-        // }
-    
-        // HTMLレスポンスを返す
-        // return view('products.index', [
-        //     'products' => $products,
-        //     'sortColumn' => $sortColumn,
-        //     'sortDirection' => $sortDirection,
-        // ]);
     }
 
     public function create()
@@ -121,6 +103,6 @@ class ProductController extends Controller
             $product->delete();
         });
 
-        return redirect('/products');
+        return response()->json(['success' => true]);//redirect('/products');
     }
 }

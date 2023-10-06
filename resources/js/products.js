@@ -18,29 +18,32 @@ $(document).ready(function () {
   $("#search-form").on("submit", function (e) {
       e.preventDefault();
       loadProductList();
+
+      $(document).on("click", ".delete-product", function () {
+        var productId = $(this).data("product-id");
+
+        $.ajax({
+            url: '/products/${productId}',
+            method: "DELETE",
+            success: function () {
+                $('#product-${productId}').hide();
+            },
+            error: function (xhr) {
+                console.error(xhr);
+            },
+        });
+      });
   });
 });
 
 function loadProductList(sortColumn = 'id', sortDirection = 'asc') {
-    console.log('Hello World');
       $.ajax({
           url: productListUrl,
           method: "GET",
 
-             data:$('#search-form').serialize(),
-        //   data: {
-        //     sort: sortColumn,
-        //     direction: sortDirection,
-        //     search: $("#search-form input[name='search']").val(),
-        //     min_price: $("#search-form input[name='min_price']").val(),
-        //     max_price: $("#search-form input[name='max_price']").val(),
-        //     min_stock: $("#search-form input[name='min_stock']").val(),
-        //     max_stock: $("#search-form input[name='max_stock']").val(),
-        //     company_id: $("#search-form select[name='company_id']").val(),
-        //   },
-          dataType:"html",
+             data: $('#search-form').serialize(),
+          dataType: "html",
           success: function (data) {
-            console.log('Hello');
             let newtable = $(data).find('#product-list')
               $("#product-list").html(newtable);
           },
