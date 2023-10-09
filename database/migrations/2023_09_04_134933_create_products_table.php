@@ -24,7 +24,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
 
             // 外部キー制約
-            $table->dropForeign(['company_id']);
+            // $table->dropForeign(['company_id']);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
         });
