@@ -1,8 +1,4 @@
-
-
 $(document).ready(function () {
-
-  
 
   $("#product-table th a").on("click", function (e) {
     e.preventDefault();
@@ -18,25 +14,11 @@ $(document).ready(function () {
   $("#search-form").on("submit", function (e) {
       e.preventDefault();
       loadProductList();
-
-      $(document).on("click", ".delete-product", function () {
-        var productId = $(this).data("product-id");
-
-        $.ajax({
-            url: '/products/${productId}',
-            method: "DELETE",
-            success: function () {
-                $('#product-${productId}').hide();
-            },
-            error: function (xhr) {
-                console.error(xhr);
-            },
-        });
-      });
   });
 });
 
 function loadProductList(sortColumn = 'id', sortDirection = 'asc') {
+
       $.ajax({
           url: productListUrl,
           method: "GET",
@@ -51,4 +33,20 @@ function loadProductList(sortColumn = 'id', sortDirection = 'asc') {
               console.error(xhr);
           },
       });
-  }
+}
+
+$(document).on("click", ".delete-product", function () {
+
+        var productId = $(this).data("product-id");
+
+        $.ajax({
+            url: '/products/' + productId,
+            method: "DELETE",
+            success: function () {
+                $('#product-' + productId).hide();
+            },
+            error: function (xhr) {
+                console.error(xhr);
+            },
+        });
+});
