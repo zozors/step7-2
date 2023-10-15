@@ -90,15 +90,14 @@
             <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline">
               @csrf
               @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm mx-1 delete-product" data-product-id="{{ $product->id }}">削除</button>
+              <button type="submit" class="btn btn-danger btn-sm mx-1 delete-product" data-product-id="{{ $product->id }}" data-delete-url="{{ route('products.destroy', $product) }}">削除</button>
             </form>
           </td>
         </tr>
       @endforeach
       </tbody>
     </table>
+    {{ $products->appends(request()->query())->links() }}
   </div>
-
-  {{ $products->appends(request()->query())->links() }}
 </div>
 @endsection

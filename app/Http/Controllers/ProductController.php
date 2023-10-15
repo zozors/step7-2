@@ -103,6 +103,9 @@ class ProductController extends Controller
             $product->delete();
         });
 
-        return response()->json(['success' => true]);//redirect('/products');
+        $redirectTo = route('products.index');
+
+        return response()->json(['success' => true, 'redirectTo' => $redirectTo]);
+        
     }
 }
