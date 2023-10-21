@@ -18,8 +18,6 @@ class CreateSalesTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->timestamps();
 
-            // 外部キー制約
-            // $table->dropForeign(['product_id']);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }

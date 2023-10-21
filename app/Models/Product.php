@@ -26,7 +26,7 @@ class Product extends Model
             if($min_price = $request->min_price){ $query->where('price', '>=', $min_price); }
             if($max_price = $request->max_price){ $query->where('price', '<=', $max_price); }
             if($min_stock = $request->min_stock){ $query->where('stock', '>=', $min_stock); }
-            if($max_stock = $request->max_stock){ $query->where('stock', '<=', $max_stock); }
+            if($max_stock = $request->input("max_stock")){ $query->where('stock', '<=', $max_stock); }
             if($sort = $request->sort){ $direction = $request->direction == 'desc' ? 'desc' : 'asc';  
             $query->orderBy($sort, $direction);
         }

@@ -23,8 +23,6 @@ class CreateProductsTable extends Migration
             $table->string('img_path', 255)->nullable();
             $table->timestamps();
 
-            // 外部キー制約
-            // $table->dropForeign(['company_id']);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
         });

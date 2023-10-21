@@ -16,7 +16,6 @@ class ProductController extends Controller
         $model = new Product;
         $products = $model->search($request);
         return view('products.index', ['products' => $products], compact('companies'));
-   
     }
 
     public function create()
@@ -24,7 +23,6 @@ class ProductController extends Controller
         $companies = Company::all();
         return view('products.create', compact('companies'));
     }
-
     
     public function store(Request $request)
     {
@@ -52,22 +50,20 @@ class ProductController extends Controller
             $model = new Product;
             $products = $model->store($request);
             });
+
         return redirect('products');
     }
-
 
     public function show(Product $product)
     {
         return view('products.show', ['product' => $product]);
     }
 
-
     public function edit(Product $product)
     {
         $companies = Company::all();
         return view('products.edit', compact('product', 'companies'));
     }
-
     
     public function update(Request $request, Product $product)
     {
@@ -93,6 +89,7 @@ class ProductController extends Controller
             $model = new Product;
             $products = $model->productUpdate($request, $product);
             });
+
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
@@ -102,10 +99,5 @@ class ProductController extends Controller
         DB::transaction(function () use ($request, $product) {
             $product->delete();
         });
-
-        $redirectTo = route('products.index');
-
-        return response()->json(['success' => true, 'redirectTo' => $redirectTo]);
-        
     }
 }

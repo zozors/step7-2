@@ -40,9 +40,9 @@
 
   <a href="{{ route('products.index') }}" class="btn btn-success mt-3">検索条件を元に戻す</a>
 
-  <div class="products mt-5">
+  <div class="products mt-5", id="product-list">
     <h2>商品情報</h2>
-    <table class="table table-striped", id="product-list">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>ID
