@@ -9,7 +9,6 @@ $(document).ready(function () {
     });
     
     $("#search-form").on("submit", function (e) {
-        console.log('検索');
         e.preventDefault();
         loadProductList();
     });
@@ -33,7 +32,6 @@ $(document).ready(function () {
     }
 
     $('.delete-product').on("click", function (e) {
-        console.log('削除')
         e.preventDefault();
         var productID = $(this).data('product-id');
         var deleteUrl = $(this).data('delete-url');
